@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zambezi Grain Exchange (ZGX)</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f4;--panel:#fff;--ink:#14262b;--mute:#5d7177;--line:#d5dee2;--gold:#a8680f;--up:#17713f;--dn:#b3372f;--sel:#e3edf0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f191c;--panel:#16252a;--ink:#e6eef0;--mute:#90a7ad;--line:#2a3d43;--gold:#e0a64a;--up:#4cc17f;--dn:#ee7c73;--sel:#1f333a}}
+:root[data-theme=dark]{--bg:#0f191c;--panel:#16252a;--ink:#e6eef0;--mute:#90a7ad;--line:#2a3d43;--gold:#e0a64a;--up:#4cc17f;--dn:#ee7c73;--sel:#1f333a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;padding:20px 16px 12px;max-width:1100px;margin:auto}
+h1{font-size:24px;margin:0;font-weight:700;letter-spacing:-.01em}h2{font-size:16px;margin:0 0 10px}
+.sub{color:var(--mute);font-size:13px}.live{color:var(--up);font-weight:500}
+.live:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--up);margin-right:6px;animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.3}}@media(prefers-reduced-motion:reduce){.live:before{animation:none}}
+main{max-width:1100px;margin:auto;padding:0 16px 32px;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:860px){main{grid-template-columns:340px 1fr}.wide{grid-column:1/-1}}
+section{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;min-width:0}
+.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:500;color:var(--mute);font-size:12px;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}td.n,th.n{text-align:right}
+tr.pick{background:var(--sel)}#mk tr{cursor:pointer}
+.up{color:var(--up)}.dn{color:var(--dn)}.best{color:var(--gold);font-weight:700}
+select,input,button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 10px}
+button{cursor:pointer;background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:500}
+button.ghost{background:none;color:var(--ink);border-color:var(--line)}button:focus-visible,select:focus-visible,input:focus-visible,#mk tr:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}label{display:grid;gap:3px;font-size:12px;color:var(--mute)}
+.big{font-size:30px;font-weight:700;line-height:1.1}svg{width:100%;height:90px;display:block}
+.tag{font-size:12px;padding:2px 7px;border-radius:10px;border:1px solid var(--line)}.msg{min-height:20px;font-size:13px;color:var(--gold);margin-top:8px}
+:root{--brand:#0f4c45}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--brand:#1f7a6d}}:root[data-theme=dark]{--brand:#1f7a6d}
+.brand{display:flex;gap:12px;align-items:center}.brand svg{width:44px;height:44px;flex:none}
+h1 small{font-weight:500;color:var(--gold);font-size:14px;margin-left:8px}
+#go{background:var(--brand);color:#fff;border-color:var(--brand)}
+footer{max-width:1100px;margin:auto;padding:0 16px 28px;color:var(--mute);font-size:12px}
+</style></head><body>
+<header><div class="brand"><svg viewBox="0 0 44 44" role="img" aria-label="ZGX logo"><rect width="44" height="44" rx="10" fill="#0f4c45"/><path d="M22 10v25" stroke="#e0a64a" stroke-width="2" stroke-linecap="round"/><path d="M22 17c-4-1-6-4-6-7 4 0 6 3 6 7zM22 17c4-1 6-4 6-7-4 0-6 3-6 7zM22 24c-4-1-6-4-6-7 4 0 6 3 6 7zM22 24c4-1 6-4 6-7-4 0-6 3-6 7zM22 31c-4-1-6-4-6-7 4 0 6 3 6 7zM22 31c4-1 6-4 6-7-4 0-6 3-6 7z" fill="#e0a64a"/><path d="M7 38q4-3 7.5 0t7.500 0 7.500 0 7.500 0" stroke="#7fd1c4" fill="none" stroke-width="2" stroke-linecap="round"/></svg><div><h1>Zambezi Grain Exchange<small>ZGX</small></h1><div class="sub">One price board for Southern African grain, ranked by landed cost</div></div></div>
+<div class="sub"><span class="live">Live</span> · indicative simulated prices in USD per tonne · <span id="clk"></span></div></header>
+<main>
+<section><h2>Markets</h2><div class="scroll"><table><thead><tr><th>Grain</th><th class="n">Best USD/t</th><th class="n">Change</th></tr></thead><tbody id="mk"></tbody></table></div></section>
+<section><div class="row" style="justify-content:space-between"><div><div class="sub" id="gname"></div><div class="big" id="gpx"></div><div id="gchg"></div></div>
+<label>Deliver to<select id="dest"></select></label></div><svg id="spark" viewBox="0 0 300 90" preserveAspectRatio="none" role="img" aria-label="Price history"></svg></section>
+<section class="wide"><h2>Offers, cheapest landed cost first</h2><div class="scroll"><table><thead><tr><th>Origin</th><th>Seller</th><th>Grade</th><th class="n">Available (t)</th><th class="n">Ex-works</th><th class="n">Freight</th><th class="n">Landed</th><th></th></tr></thead><tbody id="offers"></tbody></table></div></section>
+<section class="wide"><h2>Place a buy order</h2><div class="row">
+<label>Selected offer<select id="of"></select></label><label>Quantity (t)<input id="qty" type="number" min="10" step="10" value="100" style="width:110px"></label>
+<label>Limit price ex-works (USD/t)<input id="lim" type="number" step="1" style="width:150px"></label><button id="go">Place order</button></div>
+<div class="msg" id="msg" role="status"></div></section>
+<section class="wide"><div class="row" style="justify-content:space-between"><h2>My orders</h2><button class="ghost" id="clr">Clear filled</button></div>
+<div class="scroll"><table><thead><tr><th>Time</th><th>Grain</th><th>Origin</th><th class="n">Qty (t)</th><th class="n">Limit</th><th class="n">Fill price</th><th>Status</th></tr></thead><tbody id="ord"></tbody></table></div></section>
+</main><footer>Zambezi Grain Exchange (ZGX). Prices, sellers and volumes shown are simulated and indicative only. Nothing here is an offer to trade.</footer>
+<script>
+const G=[["White maize",258,"Grade 1, 12.5% moisture"],["Yellow maize",268,"Grade 1, 12.5% moisture"],["Wheat",335,"Grade B1, 12% protein"],["Sorghum",285,"Grade 1, 12% moisture"],["Soybeans",520,"Grade 2, 13% moisture"],["Rice (paddy)",410,"Grade 1, 14% moisture"]];
+const M={ZA:["Johannesburg",-26.2,28.0,0,"South Africa"],ZM:["Lusaka",-15.4,28.3,-.06,"Zambia"],ZW:["Harare",-17.8,31.05,.02,"Zimbabwe"],MW:["Lilongwe",-14,33.8,-.08,"Malawi"],TZ:["Dar es Salaam",-6.8,39.3,-.03,"Tanzania"],MZ:["Maputo",-25.97,32.57,.01,"Mozambique"],BW:["Gaborone",-24.65,25.9,.05,"Botswana"],AO:["Luanda",-8.8,13.2,.08,"Angola"]};
+const S=["Agri Traders","Savanna Mills","Highveld Co-op","Rift Valley Grain","Zambezi Growers","Kalahari Silos"];
+const R=(a,b)=>a+Math.random()*(b-a),$=(n)=>"$"+n.toFixed(2),K=Object.keys(M);
+function km(a,b){const r=x=>x*Math.PI/180,A=M[a],B=M[b],d=Math.sin(r(B[1]-A[1])/2)**2+Math.cos(r(A[1]))*Math.cos(r(B[1]))*Math.sin(r(B[2]-A[2])/2)**2;return 12742*Math.asin(Math.sqrt(d))*1.3}
+const fr=(o,d)=>o===d?4:12+km(o,d)*.055;
+const st=G.map((g,i)=>({n:g[0],px:g[1],open:g[1],h:Array(60).fill(g[1]),grade:g[2],
+ offers:K.map((k,j)=>({id:i+"-"+k,k,s:S[(i+j)%6],qty:Math.round(R(300,6000)/10)*10,sp:R(-.015,.025)}))}));
+let sel=0,orders=[];try{orders=JSON.parse(localStorage.getItem("sgx")||"[]")}catch(e){}
+const ex=(g,o)=>g.px*(1+M[o.k][3])*(1+o.sp);
+const dest=()=>document.getElementById("dest").value,E=id=>document.getElementById(id);
+function ranked(g){const d=dest();return g.offers.filter(o=>o.qty>0).map(o=>({o,x:ex(g,o),f:fr(o.k,d)})).map(r=>({...r,l:r.x+r.f})).sort((a,b)=>a.l-b.l)}
+function chg(g){const c=(g.px-g.open)/g.open*100;return `<span class="${c>=0?"up":"dn"}">${c>=0?"+":""}${c.toFixed(2)}%</span>`}
+function draw(){
+ E("mk").innerHTML=st.map((g,i)=>{const b=ranked(g)[0];return `<tr tabindex="0" data-i="${i}" class="${i==sel?"pick":""}"><td>${g.n}</td><td class="n">${b?$(b.x):"-"}</td><td class="n">${chg(g)}</td></tr>`}).join("");
+ const g=st[sel],rk=ranked(g);
+ E("gname").textContent=g.n+" · "+g.grade;E("gpx").textContent=$(g.px)+" /t";E("gchg").innerHTML=chg(g)+" <span class='sub'>since session start</span>";
+ const lo=Math.min(...g.h),hi=Math.max(...g.h),p=g.h.map((v,i)=>`${i*300/59},${84-(v-lo)/(hi-lo||1)*76}`).join(" ");
+ E("spark").innerHTML=`<polyline fill="none" stroke="var(--gold)" stroke-width="2" vector-effect="non-scaling-stroke" points="${p}"/>`;
+ E("offers").innerHTML=rk.map((r,i)=>`<tr class="${i==0?"pick":""}"><td>${M[r.o.k][4]} <span class="sub">${M[r.o.k][0]}</span></td><td>${r.o.s}</td><td>${g.grade.split(",")[0]}</td><td class="n">${r.o.qty.toLocaleString()}</td><td class="n">${$(r.x)}</td><td class="n">${$(r.f)}</td><td class="n ${i==0?"best":""}">${$(r.l)}</td><td><button class="ghost" data-o="${r.o.id}">Buy</button></td></tr>`).join("");
+ const cur=E("of").value;E("of").innerHTML=rk.map(r=>`<option value="${r.o.id}">${M[r.o.k][4]} · ${r.o.s} · ${$(r.x)}</option>`).join("");if(cur&&rk.some(r=>r.o.id==cur))E("of").value=cur;
+ E("ord").innerHTML=orders.length?orders.slice().reverse().map(o=>`<tr><td>${o.t}</td><td>${o.g}</td><td>${o.c}</td><td class="n">${o.q}</td><td class="n">${$(o.l)}</td><td class="n">${o.f?$(o.f):"-"}</td><td><span class="tag ${o.s=="Filled"?"up":""}">${o.s}</span></td></tr>`).join(""):`<tr><td colspan="7" class="sub">No orders yet. Pick an offer and place a buy order.</td></tr>`;
+}
+function find(id){const [i,k]=id.split("-");return {g:st[i],o:st[i].offers.find(o=>o.k==k)}}
+function save(){try{localStorage.setItem("sgx",JSON.stringify(orders))}catch(e){}}
+function tryFill(od){const {g,o}=find(od.id),x=ex(g,o);if(od.s=="Open"&&x<=od.l&&o.qty>=od.q){o.qty-=od.q;od.s="Filled";od.f=x;return true}return false}
+function tick(){st.forEach(g=>{g.px=Math.max(50,g.px*(1+R(-.004,.004)));g.h.push(g.px);g.h.shift();g.offers.forEach(o=>{if(Math.random()<.15)o.sp+=R(-.003,.003);if(Math.random()<.1)o.qty+=Math.round(R(-40,40)/10)*10;if(o.qty<0)o.qty=0})});
+ let ch=false;orders.forEach(od=>{if(tryFill(od))ch=true});if(ch)save();draw();E("clk").textContent=new Date().toLocaleTimeString()}
+E("mk").onclick=e=>{const r=e.target.closest("tr");if(r){sel=+r.dataset.i;E("lim").value="";draw()}};
+E("mk").onkeydown=e=>{if(e.key=="Enter"&&e.target.dataset.i){sel=+e.target.dataset.i;draw()}};
+E("offers").onclick=e=>{const b=e.target.closest("button");if(b){E("of").value=b.dataset.o;const f=find(b.dataset.o);E("lim").value=Math.ceil(ex(f.g,f.o));E("qty").focus()}};
+E("go").onclick=()=>{const id=E("of").value,q=+E("qty").value,l=+E("lim").value;if(!id||q<10){E("msg").textContent="Enter a quantity of at least 10 tonnes.";return}
+ const {g,o}=find(id);const lim=l||Math.ceil(ex(g,o)),od={id,g:g.n,c:M[o.k][4],q,l:lim,s:"Open",f:0,t:new Date().toLocaleTimeString()};
+ const ok=tryFill(od);orders.push(od);save();E("msg").textContent=ok?`Filled: ${q} t of ${g.n} from ${M[o.k][4]} at ${$(od.f)}/t.`:"Order is open. It fills when the offer drops to your limit and has the volume.";draw()};
+E("clr").onclick=()=>{orders=orders.filter(o=>o.s!="Filled");save();draw()};
+E("dest").innerHTML=K.map(k=>`<option value="${k}">${M[k][0]}, ${M[k][4]}</option>`).join("");E("dest").value="ZW";E("dest").onchange=draw;
+draw();tick();setInterval(tick,2000);
+</script></body></html>
